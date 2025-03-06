@@ -2,67 +2,166 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dienst eingestellt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Bus-Boardcomputer</title>
+    <link rel="apple-touch-icon" href="icon.png"> <!-- Falls du ein Icon möchtest -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Boardcomputer">
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #7bb6f6;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            touch-action: manipulation;
         }
         .container {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
         }
-        .container img {
-            width: 100px;
-            margin-bottom: 20px;
+        input, button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
         }
-        .container h1 {
-            font-size: 1.8em;
-            color: #1e3a8a;
-            margin-bottom: 10px;
-        }
-        .container p {
-            font-size: 1.1em;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .container .info {
-            font-size: 0.9em;
-            color: #666;
-        }
-        .github-link {
-            display: inline-block;
-            background-color: #1e3a8a;
+        button {
+            background-color: #007bff;
             color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-size: 1em;
-            text-decoration: none;
-            margin-top: 20px;
+            cursor: pointer;
         }
-        .github-link:hover {
-            background-color: #142d6b;
+        button:hover {
+            background-color: #0056b3;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="IMG_0190.webp" alt="Logo">
-        <h1>Mit schwerem Herzen nehmen wir Abschied</h1>
-        <p>Nach einer unvergesslichen Zeit müssen wir unseren Dienst leider einstellen.  
-           Wir danken allen Nutzern für ihre Unterstützung, ihr Vertrauen und die gemeinsamen Momente.</p>
-        <p class="info">Doch nicht alles ist verloren – der Code bleibt für euch verfügbar.</p>
-        <a href="https://github.com/MGETZ-io/Schule4.0/" class="github-link" target="_blank">📂 Quellcode auf GitHub</a>
+
+    <!-- Login-Bereich -->
+    <div id="loginScreen" class="container">
+        <h2>Login</h2>
+        <input type="text" id="driverNumber" placeholder="Fahrernummer eingeben">
+        <button onclick="login()">Anmelden</button>
     </div>
+
+    <!-- Hauptmenü -->
+    <div id="mainMenu" class="container hidden">
+        <h2>Board-Computer</h2>
+        <button onclick="showRouteSelection()">Route auswählen</button>
+        <button onclick="showTicketing()">Ticketing</button>
+        <button onclick="alert('Notruf ausgelöst!')">🚨 Notruf</button>
+        <button onclick="alert('Ansage abgespielt!')">📢 Ansage</button>
+    </div>
+
+    <!-- Routenwahl -->
+    <div id="routeSelection" class="container hidden">
+        <h2>Wähle eine Route</h2>
+        <select id="routeSelect"></select>
+        <button onclick="startRoute()">Starten</button>
+        <button onclick="backToMenu()">Zurück</button>
+    </div>
+
+    <!-- IDCS (Route) -->
+    <div id="idcsScreen" class="container hidden">
+        <h2>IDCS - Routeninfo</h2>
+        <p>Aktuelle Route: <span id="currentRoute"></span></p>
+        <p>Aktuelle Haltestelle: <span id="currentStop"></span></p>
+        <button onclick="nextStop()">➡ Nächste Haltestelle</button>
+        <button onclick="backToMenu()">Zurück</button>
+    </div>
+
+    <!-- Ticketing -->
+    <div id="ticketScreen" class="container hidden">
+        <h2>Ticketing</h2>
+        <button onclick="sellTicket('Kinderfahrkarte')">👶 Kinderfahrkarte</button>
+        <button onclick="sellTicket('Normale Fahrkarte')">🎫 Normale Fahrkarte</button>
+        <button onclick="sellTicket('Umsteigerkarte')">🔁 Umsteigerkarte</button>
+        <p id="ticketMessage"></p>
+        <button onclick="backToMenu()">Zurück</button>
+    </div>
+
+    <script>
+        let routes = {
+            "1 & 11": ["Hauptbahnhof", "Marktplatz", "Rathaus", "Schule", "Endhaltestelle"],
+            "2 & 22": ["ZOB", "Poststraße", "Bahnhofstraße", "Stadion", "Endhaltestelle"],
+            "3 & 33": ["Technologiepark", "Uni", "Bürgerpark", "Zoo", "Endhaltestelle"],
+            "4 & 44": ["Flughafen", "City Center", "Krankenhaus", "Museum", "Endhaltestelle"],
+            "5 & 55": ["Gewerbegebiet", "Schule", "Bahnhof", "Rathaus", "Endhaltestelle"],
+            "6 & 66": ["Marktplatz", "Wohngebiet", "Freizeitpark", "See", "Endhaltestelle"],
+            "7 & 77": ["Messegelände", "Innenstadt", "Oper", "Schloss", "Endhaltestelle"],
+            "8 & 88": ["Klinikum", "Hafen", "Theater", "Dom", "Endhaltestelle"],
+            "9 & 99": ["Bergstraße", "Altstadt", "Fußgängerzone", "Stadtpark", "Endhaltestelle"],
+            "10 & 199": ["Uni West", "Einkaufszentrum", "Hauptbahnhof", "Marktplatz", "Endhaltestelle"]
+        };
+        let currentRoute = "";
+        let currentStopIndex = 0;
+
+        function login() {
+            let driverNumber = document.getElementById("driverNumber").value;
+            if (driverNumber) {
+                document.getElementById("loginScreen").classList.add("hidden");
+                document.getElementById("mainMenu").classList.remove("hidden");
+            } else {
+                alert("Bitte Fahrernummer eingeben!");
+            }
+        }
+
+        function showRouteSelection() {
+            document.getElementById("mainMenu").classList.add("hidden");
+            document.getElementById("routeSelection").classList.remove("hidden");
+            let select = document.getElementById("routeSelect");
+            select.innerHTML = "";
+            for (let route in routes) {
+                let option = document.createElement("option");
+                option.value = route;
+                option.innerText = route;
+                select.appendChild(option);
+            }
+        }
+
+        function startRoute() {
+            currentRoute = document.getElementById("routeSelect").value;
+            currentStopIndex = 0;
+            document.getElementById("routeSelection").classList.add("hidden");
+            document.getElementById("idcsScreen").classList.remove("hidden");
+            document.getElementById("currentRoute").innerText = currentRoute;
+            document.getElementById("currentStop").innerText = routes[currentRoute][currentStopIndex];
+        }
+
+        function nextStop() {
+            if (currentStopIndex < routes[currentRoute].length - 1) {
+                currentStopIndex++;
+                document.getElementById("currentStop").innerText = routes[currentRoute][currentStopIndex];
+            } else {
+                alert("Endhaltestelle erreicht!");
+            }
+        }
+
+        function showTicketing() {
+            document.getElementById("mainMenu").classList.add("hidden");
+            document.getElementById("ticketScreen").classList.remove("hidden");
+        }
+
+        function sellTicket(type) {
+            document.getElementById("ticketMessage").innerText = `${type} verkauft!`;
+        }
+
+        function backToMenu() {
+            document.getElementById("routeSelection").classList.add("hidden");
+            document.getElementById("idcsScreen").classList.add("hidden");
+            document.getElementById("ticketScreen").classList.add("hidden");
+            document.getElementById("mainMenu").classList.remove("hidden");
+        }
+    </script>
+
 </body>
 </html>
