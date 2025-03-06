@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wie funktioniert der Boardcomputer?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .content {
+            max-width: 800px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            color: #00bfff;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content">
+        <h1>Wie funktioniert der Boardcomputer?</h1>
+        
+        <h2>1. Anmeldung</h2>
+        <p>Um den Boardcomputer zu verwenden, melden Sie sich mit Ihrer Fahrernummer an. Geben Sie Ihre Nummer ein und tippen Sie auf „Anmelden“.</p>
+        
+        <h2>2. Hauptmenü</h2>
+        <p>Nach der Anmeldung gelangen Sie ins Hauptmenü. Dort können Sie die verschiedenen Funktionen des Systems auswählen:</p>
+        <ul>
+            <li><strong>Route auswählen:</strong> Wählen Sie eine Übungsroute aus, die Sie fahren möchten.</li>
+            <li><strong>Ticketing:</strong> Verkaufen Sie verschiedene Fahrkarten (Kinderfahrkarte, normale Fahrkarte, Umsteigerkarte).</li>
+            <li><strong>Notruf:</strong> Aktivieren Sie den Notruf, wenn nötig.</li>
+            <li><strong>Ansage:</strong> Machen Sie Durchsagen über den Buslautsprecher.</li>
+        </ul>
+
+        <h2>3. IDCS - Routeninfo</h2>
+        <p>Wenn Sie eine Route auswählen, können Sie die aktuellen Haltestellen und die Routenbeschreibung einsehen. Jede Route hat vordefinierte Haltestellen, die Sie durchlaufen werden. Tippen Sie auf „Nächste Haltestelle“, um fortzufahren.</p>
+
+        <h2>4. Ticketing</h2>
+        <p>Im Ticketing-Bereich können Sie unterschiedliche Ticketarten verkaufen, wie Kinderfahrkarten, normale Fahrkarten oder Umsteigerkarten.</p>
+
+        <h2>5. Schnellklick-Buttons</h2>
+        <p>Im Hauptmenü finden Sie Schnellklick-Buttons für Notruf und Ansagen, die Sie schnell und einfach aktivieren können.</p>
+
+        <button onclick="window.location.href = 'index.html';">Zurück zum Boardcomputer</button>
+    </div>
+
+</body>
+</html>
