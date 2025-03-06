@@ -4,43 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Bus-Boardcomputer</title>
-    <link rel="apple-touch-icon" href="icon.png"> <!-- Falls du ein Icon möchtest -->
+    <!-- Lesezeichen Icon hinzufügen -->
+    <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaQrxEuSS2opRnq7y9EiqVPP387n04R4vHgw&s">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Boardcomputer">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #222;
-            color: white;
-            text-align: center;
-            touch-action: manipulation;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         .container {
-            max-width: 400px;
-            margin: auto;
+            width: 100%;
+            max-width: 480px;
+            margin: 20px auto;
             padding: 20px;
-            background-color: #333;
+            background-color: #1c1c1c;
             border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            border: 2px solid #00ff00;
         }
-        input, button {
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .display-screen {
+            background-color: #222;
+            color: #00ff00;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 10px;
+            font-size: 20px;
+            text-align: left;
+            height: 150px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.6);
+        }
+
+        button {
             width: 100%;
             padding: 15px;
             margin: 10px 0;
-            border: none;
-            border-radius: 5px;
             font-size: 18px;
-        }
-        button {
+            border: none;
+            border-radius: 10px;
             background-color: #007bff;
             color: white;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: none;
+            background-color: #222;
+            color: white;
+            box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.3);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: none;
+            background-color: #222;
+            color: white;
+            box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.3);
+        }
+
         .hidden {
             display: none;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin: 15px 0;
         }
     </style>
 </head>
@@ -48,40 +113,56 @@
 
     <!-- Login-Bereich -->
     <div id="loginScreen" class="container">
-        <h2>Login</h2>
-        <input type="text" id="driverNumber" placeholder="Fahrernummer eingeben">
+        <h1>Fahrzeug-Boardcomputer</h1>
+        <div class="display-screen">
+            <p>Bitte Fahrernummer eingeben...</p>
+        </div>
+        <input type="text" id="driverNumber" placeholder="Fahrernummer">
         <button onclick="login()">Anmelden</button>
     </div>
 
     <!-- Hauptmenü -->
     <div id="mainMenu" class="container hidden">
-        <h2>Board-Computer</h2>
-        <button onclick="showRouteSelection()">Route auswählen</button>
-        <button onclick="showTicketing()">Ticketing</button>
-        <button onclick="alert('Notruf ausgelöst!')">🚨 Notruf</button>
-        <button onclick="alert('Ansage abgespielt!')">📢 Ansage</button>
+        <h2 class="header">Hauptmenü</h2>
+        <div class="display-screen">
+            <p>Wählen Sie eine der Funktionen:</p>
+        </div>
+        <div class="button-container">
+            <button onclick="showRouteSelection()">Route auswählen</button>
+            <button onclick="showTicketing()">Ticketing</button>
+            <button onclick="alert('Notruf ausgelöst!')">🚨 Notruf</button>
+            <button onclick="alert('Ansage abgespielt!')">📢 Ansage</button>
+        </div>
     </div>
 
     <!-- Routenwahl -->
     <div id="routeSelection" class="container hidden">
-        <h2>Wähle eine Route</h2>
+        <h2 class="header">Wähle eine Route</h2>
+        <div class="display-screen">
+            <p>Bitte wählen Sie eine der Übungsrouten:</p>
+        </div>
         <select id="routeSelect"></select>
-        <button onclick="startRoute()">Starten</button>
+        <button onclick="startRoute()">Route starten</button>
         <button onclick="backToMenu()">Zurück</button>
     </div>
 
-    <!-- IDCS (Route) -->
+    <!-- IDCS -->
     <div id="idcsScreen" class="container hidden">
-        <h2>IDCS - Routeninfo</h2>
-        <p>Aktuelle Route: <span id="currentRoute"></span></p>
-        <p>Aktuelle Haltestelle: <span id="currentStop"></span></p>
+        <h2 class="header">IDCS - Routeninfo</h2>
+        <div class="display-screen">
+            <p>Aktuelle Route: <span id="currentRoute"></span></p>
+            <p>Aktuelle Haltestelle: <span id="currentStop"></span></p>
+        </div>
         <button onclick="nextStop()">➡ Nächste Haltestelle</button>
         <button onclick="backToMenu()">Zurück</button>
     </div>
 
     <!-- Ticketing -->
     <div id="ticketScreen" class="container hidden">
-        <h2>Ticketing</h2>
+        <h2 class="header">Ticketing</h2>
+        <div class="display-screen">
+            <p>Wählen Sie die Art des Tickets:</p>
+        </div>
         <button onclick="sellTicket('Kinderfahrkarte')">👶 Kinderfahrkarte</button>
         <button onclick="sellTicket('Normale Fahrkarte')">🎫 Normale Fahrkarte</button>
         <button onclick="sellTicket('Umsteigerkarte')">🔁 Umsteigerkarte</button>
