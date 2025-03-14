@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bussteigansagen</title>
+    <style>
+        /* Farben nach nah.sh Corporate Design */
+        :root {
+            --nahsh-blau: #007AC2;
+            --nahsh-gruen: #A2AD00;
+            --nahsh-grau: #6E6E6E;
+            --hintergrund: #F4F4F4;
+            --weiss: #FFFFFF;
+        }
+
+        /* Allgemeine Stile */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--hintergrund);
+            color: var(--nahsh-grau);
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--nahsh-blau);
+        }
+
+        /* Container für das Auswahlformular */
+        .container {
+            background-color: var(--weiss);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dropdown-Menüs */
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid var(--nahsh-grau);
+            background-color: var(--weiss);
+            font-size: 16px;
+            color: var(--nahsh-grau);
+        }
+
+        /* Button */
+        button {
+            background-color: var(--nahsh-gruen);
+            color: var(--weiss);
+            font-size: 18px;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #8E9B00;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Bussteigansagen Generator</h1>
+
+    <div class="container">
+        <label for="gleis">Gleis:</label>
+        <select id="gleis">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+        </select>
+
+        <label for="linie">Linie:</label>
+        <select id="linie">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+        </select>
+
+        <label for="richtung">Richtung:</label>
+        <select id="richtung">
+            <option value="innenstadt">Innenstadt</option>
+            <option value="ring">Ring</option>
+            <option value="astrapark">Astra Park</option>
+        </select>
+
+        <label for="ausfall">Ausfall:</label>
+        <select id="ausfall">
+            <option value="nein">Nein</option>
+            <option value="ja">Ja</option>
+        </select>
+
+        <label for="verspaetet">Verspätet:</label>
+        <select id="verspaetet">
+            <option value="nein">Nein</option>
+            <option value="ja">Ja</option>
+        </select>
+
+        <button onclick="spieleAnsage()">Ansage abspielen</button>
+    </div>
+
+    <script>
+        function spieleAnsage() {
+            let gleis = document.getElementById("gleis").value;
+            let linie = document.getElementById("linie").value;
+            let richtung = document.getElementById("richtung").value;
+            let ausfall = document.getElementById("ausfall").value;
+            let verspaetet = document.getElementById("verspaetet").value;
+
+            let audios = [
+                new Audio(`audio/gleis${gleis}.mp3`),
+                new Audio(`audio/linie${linie}.mp3`),
+                new Audio(`audio/richtung_${richtung}.mp3`)
+            ];
+
+            if (ausfall === "ja") {
+                audios.push(new Audio(`audio/ausfall.mp3`));
+            } else if (verspaetet === "ja") {
+                audios.push(new Audio(`audio/verspaetet.mp3`));
+            }
+
+            function playNext(index) {
+                if (index < audios.length) {
+                    audios[index].play();
+                    audios[index].onended = function() {
+                        playNext(index + 1);
+                    };
+                }
+            }
+
+            playNext(0);
+        }
+    </script>
+
+</body>
+</html>
